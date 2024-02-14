@@ -22,7 +22,7 @@ jobs:
         - name: Fetch possible Stage-route through TestBB-lookup
           id: http-request-stage
           run: |
-              response=$(curl -s "https://cloud.caspeco.se/.where?system=se__testbb")
+              response=$(curl -s "https://cloud.caspeco.se/.where?system=se_broupp")
               echo "Got response $response"
               echo "DEV_URL=$response" >> $GITHUB_ENV
 
@@ -30,7 +30,7 @@ jobs:
           id: extract-stage-branch
           run: |
               response="${{ env.DEV_URL }}"
-              echo $response
+              echo "Got response: $response"
               if [[ $response != *"dev-"* ]]; then
               branch_name=$(echo "$response" | grep -oE '[0-9]{6}' | head -n1) >> $GITHUB_ENV
               echo "I parsed the branch_name: $branch_name"
