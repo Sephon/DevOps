@@ -31,7 +31,7 @@ jobs:
           run: |
               response="${{ env.DEV_URL }}"
               if [[ $response != *"dev-"* ]]; then
-              branch_name=$(echo "$response" | grep -oE '[0-9]{6}' | head -n1)
+              branch_name=$(echo "$response" | grep -oE '[0-9]{6}' | head -n1) >> $GITHUB_ENV
               echo "I parsed the branch_name: ${{ $branch_name }}"
               echo "BRANCH_NAME_STAGE=$branch_name" >> $GITHUB_ENV
               echo "CHECKOUT_FAILED_STAGE=false" >> $GITHUB_ENV
