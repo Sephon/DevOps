@@ -41,7 +41,7 @@ jobs:
               echo "BRANCH_NAME_STAGE=$branch_name" >> $GITHUB_ENV
               echo "CHECKOUT_FAILED_STAGE=true" >> $GITHUB_ENV
               fi
-              echo "Direct variable in-step: $branchname"
+              echo "Direct variable in-step (branch_name): $branch_name"
               echo "Env var in-step (BRANCH_NAME_PROD): $BRANCH_NAME_PROD"
               echo "Env var in-step (BRANCH_NAME_STAGE): $BRANCH_NAME_STAGE"
               echo "Env var in-step (CHECKOUT_FAILED_STAGE): $CHECKOUT_FAILED_STAGE"
