@@ -40,3 +40,6 @@ jobs:
               echo "Branch name not found in $response."
               echo "CHECKOUT_FAILED_STAGE=true" >> $GITHUB_ENV
               fi
+              echo "prod: ${{ env.BRANCH_NAME_PROD }}"
+              echo "stage: ${{ env.BRANCH_NAME_STAGE }}"
+              echo "faield stage: ${{ env.CHECKOUT_FAILED_STAGE }}"
