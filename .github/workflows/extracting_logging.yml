@@ -41,13 +41,18 @@ jobs:
               echo "BRANCH_NAME_STAGE=$branch_name" >> $GITHUB_ENV
               echo "CHECKOUT_FAILED_STAGE=true" >> $GITHUB_ENV
               fi
+              echo "Direct variable in-step: $branchname"
+              echo "Env var in-step (BRANCH_NAME_PROD): $BRANCH_NAME_PROD"
+              echo "Env var in-step (BRANCH_NAME_STAGE): $BRANCH_NAME_STAGE"
+              echo "Env var in-step (CHECKOUT_FAILED_STAGE): $CHECKOUT_FAILED_STAGE"
+
         - name: Read output
           id: read-output
           run: |           
-            printf '%s\n' "$branch_name"
-            echo "Branch_Prod: $BRANCH_NAME_PROD"
-            echo "Branch_Stage: $BRANCH_NAME_STAGE"
-            echo "Failed: $CHECKOUT_FAILED_STAGE"
+            echo "Direct variable cross-steps (branch_name): $branch_name"
+            echo "Env var cross-step (BRANCH_NAME_PROD): $BRANCH_NAME_PROD"
+            echo "Env var cross-step (BRANCH_NAME_STAGE): $BRANCH_NAME_STAGE"
+            echo "Env var cross-step (CHECKOUT_FAILED_STAGE): $CHECKOUT_FAILED_STAGE"
 
   use-vars:
     needs: extract-names
@@ -57,6 +62,7 @@ jobs:
       - name: "print vars"
         id: "print-vars"
         run: |
-            echo "prod: $BRANCH_NAME_PROD"
-            echo "stage: $BRANCH_NAME_STAGE"
-            echo "failed stage: $CHECKOUT_FAILED_STAGE"
+            echo "Direct variable cross-job (branch_name): $branch_name"
+            echo "Env var cross-job (BRANCH_NAME_PROD): $BRANCH_NAME_PROD"
+            echo "Env var cross-job (BRANCH_NAME_STAGE): $BRANCH_NAME_STAGE"
+            echo "Env var cross-job (CHECKOUT_FAILED_STAGE): $CHECKOUT_FAILED_STAGE"
