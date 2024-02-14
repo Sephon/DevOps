@@ -1,0 +1,41 @@
+name: "Extracting values and logging"
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * *'    # every day at midnight
+
+env:
+  IMAGE_NAME_STAGE: air-analytics-dump:stage
+  IMAGE_NAME_PROD: air-analytics-dump:prod
+
+jobs:
+  build-and-publish-stage:
+    runs-on: ubuntu-latest
+
+    steps:
+        - name: 'Check net 7'
+          uses: actions/setup-dotnet@v2
+          with:
+            dotnet-version: 7.x
+
+        - name: Fetch possible Stage-route through TestBB-lookup
+          id: http-request-stage
+          run: |
+              response=$(curl -s "https://cloud.caspeco.se/.where?system=se__testbb")
+              echo "Got response $response"
+              echo "DEV_URL=$response" >> $GITHUB_ENV
+
+        - name: Extract Stage branch name
+          id: extract-stage-branch
+          run: |
+              response="${{ env.DEV_URL }}"
+              if [[ $response != *"dev-"* ]]; then
+              format('Hello {0} {1} {2}', 'Mona', 'the', 'Octocat')
+              branch_name=$(echo "$response" | grep -oE '[0-9]{6}' | head -n1)
+              echo "BRANCH_NAME_STAGE=$branch_name" >> $GITHUB_ENV
+              echo "CHECKOUT_FAILED_STAGE=false" >> $GITHUB_ENV
+              else
+              echo "Branch name not found in $response."
+              echo "CHECKOUT_FAILED_STAGE=true" >> $GITHUB_ENV
+              fi
