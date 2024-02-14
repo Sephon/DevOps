@@ -34,12 +34,20 @@ jobs:
               if [[ $response != *"dev-"* ]]; then
               branch_name=$(echo "$response" | awk -F 'marc-|\\.azure' '{print $2}' | grep -oE '[0-9-]+[0-9]')
               echo "I parsed the branch_name: $branch_name"
-              echo "BRANCH_NAME_STAGE=$branch_name" >> $GITHUB_ENV
+              echo "BRANCH_NAME_PROD=$branch_name" >> $GITHUB_ENV
               echo "CHECKOUT_FAILED_STAGE=false" >> $GITHUB_ENV
               else
               echo "Branch name not found in $response."
+              echo "BRANCH_NAME_STAGE=$branch_name" >> $GITHUB_ENV
               echo "CHECKOUT_FAILED_STAGE=true" >> $GITHUB_ENV
               fi
+        - name: Read output
+          id: read-output
+          run: |           
+            printf '%s\n' "$branch_name"
+            echo "Branch_Prod: $BRANCH_NAME_PROD"
+            echo "Branch_Stage: $BRANCH_NAME_STAGE"
+            echo "Failed: $CHECKOUT_FAILED_STAGE"
 
   use-vars:
     needs: extract-names
@@ -49,6 +57,6 @@ jobs:
       - name: "print vars"
         id: "print-vars"
         run: |
-            echo "prod: ${{ env.BRANCH_NAME_PROD }}"
-            echo "stage: ${{ env.BRANCH_NAME_STAGE }}"
-            echo "faield stage: ${{ env.CHECKOUT_FAILED_STAGE }}"        
+            echo "prod: $BRANCH_NAME_PROD"
+            echo "stage: $BRANCH_NAME_STAGE"
+            echo "failed stage: $CHECKOUT_FAILED_STAGE"
